@@ -30,7 +30,7 @@ program
       const status = task.status === 'completed' ? '✅' : '⏳';
       const priority = task.priority === 'high' ? chalk.red('HIGH') : 
                       task.priority === 'low' ? chalk.gray('LOW') : chalk.yellow('MED');
-      console.log(`${status} [${priority}] ${task.text}`);
+      console.log(`${status} [${priority}] ${chalk.gray('#' + task.id)} ${task.text}`);
     });
   });
 
@@ -42,6 +42,32 @@ program
     const newTask = storage.addTask(task, options.priority);
     console.log(chalk.green('✅ Task added:'), task);
     console.log(chalk.gray(`   ID: ${newTask.id} | Priority: ${options.priority}`));
+  });
+
+program
+  .command('complete <id>')
+  .alias('done')
+  .description('Mark a task as completed')
+  .action((id) => {
+    const task = storage.completeTask(id);
+    if (task) {
+      console.log(chalk.green('✅ Task completed:'), task.text);
+    } else {
+      console.log(chalk.red('❌ Task not found'));
+    }
+  });
+
+program
+  .command('remove <id>')
+  .alias('rm')
+  .description('Remove a task')
+  .action((id) => {
+    const result = storage.removeTask(id);
+    if (result) {
+      console.log(chalk.yellow('🗑️  Task removed'));
+    } else {
+      console.log(chalk.red('❌ Task not found'));
+    }
   });
 
 program.parse();
