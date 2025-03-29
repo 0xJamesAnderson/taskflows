@@ -17,12 +17,29 @@ program
   .command('list')
   .alias('ls')
   .description('List all tasks')
-  .action(() => {
-    const tasks = storage.getTasks();
-    console.log(chalk.blue('📋 Your Tasks:'));
+  .option('--pending', 'Show only pending tasks')
+  .option('--completed', 'Show only completed tasks')
+  .action((options) => {
+    let tasks = storage.getTasks();
+    
+    if (options.pending) {
+      tasks = tasks.filter(t => t.status === 'pending');
+      console.log(chalk.blue('📋 Pending Tasks:'));
+    } else if (options.completed) {
+      tasks = tasks.filter(t => t.status === 'completed');
+      console.log(chalk.blue('📋 Completed Tasks:'));
+    } else {
+      console.log(chalk.blue('📋 All Tasks:'));
+    }
     
     if (tasks.length === 0) {
-      console.log(chalk.gray('No tasks yet. Use "taskflows add" to create your first task.'));
+      if (options.pending) {
+        console.log(chalk.gray('No pending tasks.'));
+      } else if (options.completed) {
+        console.log(chalk.gray('No completed tasks.'));
+      } else {
+        console.log(chalk.gray('No tasks yet. Use "taskflows add" to create your first task.'));
+      }
       return;
     }
 
@@ -67,6 +84,18 @@ program
       console.log(chalk.yellow('🗑️  Task removed'));
     } else {
       console.log(chalk.red('❌ Task not found'));
+    }
+  });
+
+program
+  .command('clear')
+  .description('Remove all completed tasks')
+  .action(() => {
+    const count = storage.clearCompleted();
+    if (count > 0) {
+      console.log(chalk.yellow(`🧹 Cleared ${count} completed task${count > 1 ? 's' : ''}`));
+    } else {
+      console.log(chalk.gray('No completed tasks to clear'));
     }
   });
 
