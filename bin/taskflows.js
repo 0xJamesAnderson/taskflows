@@ -99,4 +99,23 @@ program
     }
   });
 
+program
+  .command('stats')
+  .description('Show task statistics')
+  .action(() => {
+    const stats = storage.getStats();
+    
+    console.log(chalk.blue('📊 Task Statistics:'));
+    console.log('');
+    console.log(chalk.green(`Total tasks: ${stats.total}`));
+    console.log(chalk.yellow(`Pending: ${stats.pending}`));
+    console.log(chalk.cyan(`Completed: ${stats.completed}`));
+    console.log(chalk.magenta(`Completion rate: ${stats.completionRate}%`));
+    console.log('');
+    console.log(chalk.blue('Priority breakdown:'));
+    console.log(chalk.red(`  High: ${stats.priority.high}`));
+    console.log(chalk.yellow(`  Medium: ${stats.priority.medium}`));
+    console.log(chalk.gray(`  Low: ${stats.priority.low}`));
+  });
+
 program.parse();
