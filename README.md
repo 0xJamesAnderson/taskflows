@@ -30,9 +30,22 @@ taskflows remove 1234567890
 ## Commands
 
 - `list` (`ls`) - Show all tasks with their status and priority
+  - `--pending` - Show only pending tasks
+  - `--completed` - Show only completed tasks
 - `add <task>` - Add a new task
   - `-p, --priority <level>` - Set priority (high/medium/low, default: medium)
 - `complete <id>` (`done`) - Mark a task as completed
 - `remove <id>` (`rm`) - Remove a task completely
+- `clear` - Remove all completed tasks
+- `stats` - Show task statistics and completion rate
 
 Tasks are stored locally in `~/.taskflows/tasks.json`.
+
+## Features
+
+- 📝 Add, complete, and remove tasks
+- 🎯 Priority levels (high, medium, low)
+- 📊 Task statistics and completion tracking
+- 🔍 Filter tasks by status
+- 🧹 Bulk cleanup of completed tasks
+- 💾 Local JSON storage
